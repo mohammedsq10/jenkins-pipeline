@@ -16,7 +16,7 @@ pipeline {
                     Node Name : $NODE_NAME
                     Executor Number : $EXECUTOR_NUMBER
                     Workspace : $WORKSPACE
-                    Thanks. """, cc: '', from: '', replyTo: '', subject: "New Build # [$BUILD_NUMBER] triggered for Job [$JOB_NAME]", to: "$emailRecipientIDs"
+                    Thanks. """, cc: '', from: '', replyTo: '', subject: "New Build # [$BUILD_NUMBER] triggered for Job [$JOB_NAME]", to: "$emailRecipientIDs" 
             }
          }
          stage ('Slack Notification') {
@@ -31,7 +31,7 @@ pipeline {
     stage('SCM Checkout') {
       steps {
         echo '>>> Start getting SCM code'
-        git 'https://github.com/khalednoh/demo1.git'
+        git 'https://github.com/mohammedsq10/demo1.git'
         echo '>>> End getting SCM code'
       }
     }
