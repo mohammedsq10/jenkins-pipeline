@@ -18,5 +18,4 @@ pipeline {
         echo '>>> End building using Maven'
       }
     }
-  }
 }
