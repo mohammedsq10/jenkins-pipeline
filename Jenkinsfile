@@ -1,37 +1,10 @@
 pipeline {
   agent any
-  stages {
-    stage ('New Build Notifications') {
-       parallel {
-          stage ('Email notification') {
-            steps {
-                    echo '>>> Send New application build notification'
-                    //mail bcc: '', body: 'Thanks', cc: '', from: '', replyTo: '', subject: "New Build # [$BUILD_NUMBER] triggered for Job [$JOB_NAME]", to: 'khaled.amrosy.fci@gmail.com'
-                    mail bcc: '', body: """Dears,
-                    A new build has been started for the Job [$JOB_NAME].
-                    Below are the Build details:
-                    Build Number : $BUILD_NUMBER
-                    Build URL is : $BUILD_URL
-                    Build Tag : $BUILD_TAG
-                    Node Name : $NODE_NAME
-                    Executor Number : $EXECUTOR_NUMBER
-                    Workspace : $WORKSPACE
-                    Thanks. """, cc: '', from: '', replyTo: '', subject: "New Build # [$BUILD_NUMBER] triggered for Job [$JOB_NAME]", to: "$emailRecipientIDs"
-            }
-         }
-         stage ('Slack Notification') {
-            steps {
-              echo '>>> Send New Build Slack notifcation'
-              slackSend baseUrl: 'https://hooks.slack.com/services/', channel: "$slackChannelName", color: 'warning', message: "New Build # [$BUILD_NUMBER] triggered for Job [$JOB_NAME]", teamDomain: "$slackTeamDomainName", tokenCredentialId: 'pipeline-demo-slackID'
-            }
-          }
-        }
-    }
-    
+  stages {  
     stage('SCM Checkout') {
       steps {
         echo '>>> Start getting SCM code'
-        git 'https://github.com/khalednoh/demo1.git'
+        git 'https://github.com/mohammedsq10/demo1.git'
         echo '>>> End getting SCM code'
       }
     }
@@ -44,7 +17,7 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
+   // stage('Build Docker Image') {
       steps {
         echo '>>> start clearing old docker images'
         sh label: '', script: '''if docker images -a | grep "pipeline-demo*" | awk \'{print $1":"$2}\' | xargs docker rmi -f; then
@@ -55,11 +28,11 @@ pipeline {
         echo '>>> End clearing old docker images'
         echo '>>> Start building App docker image'
         sh "docker build -t $MyDockerAccountName/$MyDockerReposioryName:$MyTagName$BUILD_NUMBER --pull=true $WORKSPACE"
-        echo '>>> End building App docker image'
+        echo '>>> End building App docker image' */
       }
     }
 
-    stage('Upload Docker Image') {
+   // stage('Upload Docker Image') {
       steps {
         echo '>>> Login to Docker hub'
         withCredentials([string(credentialsId: 'DockHubSecret', variable: 'DockerHubIDSecret')]) {
@@ -67,7 +40,7 @@ pipeline {
         }
         echo '>>> Start uploading the docker image'
         sh "docker push $MyDockerAccountName/$MyDockerReposioryName:$MyTagName$BUILD_NUMBER"
-        echo '>>> End uploading the docker image'
+        echo '>>> End uploading the docker image' */
       }
     }
 
